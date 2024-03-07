@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quizz/app/router_name.dart';
+import 'package:quizz/app/utils/const.dart';
+import 'package:quizz/pages/article/widgets/loading.dart';
+import 'package:quizz/pages/article/widgets/title.dart';
 
 class ArticlePage extends StatelessWidget {
   const ArticlePage({super.key});
@@ -9,17 +12,28 @@ class ArticlePage extends StatelessWidget {
 Widget build(BuildContext context) {
     
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('HomePage'),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset('assets/images/bg.jpg', fit: BoxFit.cover,),
+          ),
+          Positioned.fill(child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const ArtTitle(),
+                    SizedBox(height: getHeight(context) * 0.04),
+                    const Loading(),
+                    SizedBox(height: getHeight(context) * 0.04),
+                  ],
+                ),
+              ),
+            ),
+          ))
+        ],
       ),
-      // body: Center(
-      //   child: ElevatedButton(
-      //     onPressed: (){
-      //       context.goNamed(RouterName.articleName);
-      //     },
-
-      //     child: const Text('Next')),
-      // ),
     );
   }
   

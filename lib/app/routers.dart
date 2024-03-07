@@ -12,7 +12,7 @@ class RouterConfigCustom {
     GoRoute(
       path: RoutersPath.homePath,
       builder: (BuildContext context, GoRouterState state) {
-        return const Homepage();
+        return const ArticlePage();
       },
       routes: <RouteBase>[
         GoRoute(
