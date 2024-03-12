@@ -41,6 +41,8 @@ dependencies:
   flutter_highlighter: ^0.1.1
   html: ^0.15.3
   youtube_player_flutter: ^8.1.2
+  provider: ^6.1.2
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

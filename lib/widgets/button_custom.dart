@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quizz/app/utils/const.dart';
+import 'package:quizz/apps/utils/const.dart';
 
 class ButtonCustom extends StatelessWidget {
   String title;
