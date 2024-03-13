@@ -1,32 +1,47 @@
-import 'package:flutter/material.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_highlighter/flutter_highlighter.dart';
-import 'package:flutter_highlighter/themes/a11y-dark.dart';
-import 'package:quizz/app/utils/parse_html.dart';
-import 'package:quizz/pages/article/widgets/model.dart';
+import 'package:provider/provider.dart';
+import 'package:quizz/apps/utils/const.dart';
+import 'package:quizz/apps/utils/parse_htlm.dart';
+import 'package:quizz/models/question_model.dart';
+import 'package:quizz/pages/article/widgets/article_modal.dart';
+import 'package:quizz/providers/question_provider.dart';
 import 'package:quizz/widgets/button_custom.dart';
-import '../../../app/utils/const.dart';
+import 'package:flutter_highlighter/themes/a11y-dark.dart';
 
-class BoxContent extends StatefulWidget{
-  const BoxContent({super.key});
+class ArticleBoxContent extends StatefulWidget {
+  int idTopic;
+  ArticleBoxContent({super.key, required this.idTopic});
 
   @override
-  State<BoxContent> createState() => _BoxContentState();
+  State<ArticleBoxContent> createState() => _ArticleBoxContentState();
 }
 
-class _BoxContentState extends State<BoxContent>{
+class _ArticleBoxContentState extends State<ArticleBoxContent> {
   final PageController pageController = PageController();
+  String valueInput = '';
 
-  void handleSubmit() async{
-    await showModel(context);
+  void handleSubmit(Question data) async {
+    if (valueInput.isEmpty) return;
+    await showModal(context, valueInput, data);
   }
+
   @override
   Widget build(BuildContext context) {
-    return ExpandablePageView.builder(
-      controller: pageController,
-      itemCount: 3,
-      itemBuilder: (context, int){
-        return Container(
+    return FutureBuilder(
+      future: context.read<QuestionProvider>().getQuestionList(widget.idTopic),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<Question> data = snapshot.data as List<Question>;
+          return ExpandablePageView.builder(
+            onPageChanged: (value) {
+              context.read<QuestionProvider>().setCurrentData(value);
+            },
+            controller: pageController,
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              return Container(
                 margin: const EdgeInsets.all(10.0),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20.0,
@@ -42,10 +57,10 @@ class _BoxContentState extends State<BoxContent>{
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    const Text(
-                      'abc',
-                      style: TextStyle(
-                        color: Colors.greenAccent,
+                    Text(
+                      data[index].title.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -99,13 +114,24 @@ class _BoxContentState extends State<BoxContent>{
                     SizedBox(height: getHeight(context) * 0.04),
                     ButtonCustom(
                       onTap: () => handleSubmit(data[index]),
+                      // onTap: (value) {
+                      //   context.read<QuestionProvider>().setCurrentData(value);
+                      // },
                       title: 'Xem kết quả',
                     ),
                   ],
                 ),
               );
+            },
+          );
+        } else {
+          return Container(
+            child: const Center(
+              child: Text('No Data'),
+            ),
+          );
+        }
       },
-
-    )
+    );
   }
 }

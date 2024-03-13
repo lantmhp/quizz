@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quizz/app/utils/const.dart';
-import 'package:quizz/pages/article/widgets/youtube.dart';
+import 'package:quizz/apps/utils/const.dart';
+import 'package:quizz/models/question_model.dart';
 
-
-Future<void> showModel(context, String valueInput, Question data) =>
+Future<void> showModal(context, String valueInput, Question data) =>
     showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -30,27 +29,6 @@ Future<void> showModel(context, String valueInput, Question data) =>
                     (valueInput == data.answer)
                         ? successAnswer(valueInput)
                         : errorAnswer(valueInput, data.answer),
-                    SizedBox(height: getHeight(context) * 0.02),
-                    data.youtube_id_result!.isNotEmpty ||
-                            data.youtube_id_result == null
-                        ? RichText(
-                            text: const TextSpan(
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 16,
-                              ),
-                              children: [
-                                TextSpan(text: 'Bạn xem thêm video giải đáp  '),
-                              ],
-                            ),
-                          )
-                        : const SizedBox(),
-                    SizedBox(height: getHeight(context) * 0.02),
-                    data.youtube_id_result!.isNotEmpty ||
-                            data.youtube_id_result == null
-                        ? Expanded(
-                            child: ArticleYoutube(id: data.youtube_id_result))
-                        : const SizedBox()
                   ],
                 ),
               )
